@@ -2,11 +2,11 @@ package main
 
 import (
 	"encoding/json"
-	"flag"
 	"fmt"
 	"log"
 	"math/rand"
 	"net/http"
+	"os"
 	"time"
 
 	"github.com/matt-doug-davidson/timestamps"
@@ -317,22 +317,24 @@ func createIntervalTimestrings() (string, string, string, string) {
 }
 
 func main() {
-	//configFilePtr := flag.String("configfile", "./configuration.yaml", "Configuration file path")
-	snPtr := flag.String("sn", "", "Serial number of simulated instrument")
-	tcpPortPtr := flag.String("port", "6969", "TCP used for simulated instrument server")
-	userNamePtr := flag.String("user", "", "Username for logging into instrument")
-	passwordPtr := flag.String("pass", "", "Password for logging into instrument")
 
-	flag.Parse()
+	sn := os.Getenv("SN")
+	tcpPort := os.Getenv("PORT")
+	userName := os.Getenv("UN")
+	password := os.Getenv("PW")
 
-	now, twenty, twelve, two := createIntervalTimestrings()
-	fmt.Println(now)
-	fmt.Println(twenty)
-	fmt.Println(twelve)
-	fmt.Println(two)
-
-	fmt.Println(sensors)
-	fmt.Printf("%T\n", sensors)
+	if sn == "" {
+		panic("Enviroment variable SN not defined")
+	}
+	if tcpPort == "" {
+		panic("Enviroment variable PORT not defined")
+	}
+	if userName == "" {
+		panic("Enviroment variable UN not defined")
+	}
+	if password == "" {
+		panic("Enviroment variable PW not defined")
+	}
 
 	//Create config structure
 	config := Config{}
@@ -341,17 +343,11 @@ func main() {
 		fmt.Println("Error unmarshal'ing sensors. Cause: ", err.Error())
 	}
 
-	fmt.Println(config)
-
 	var inst = Instrument{
-		SerialNumber: *snPtr, TcpPort: *tcpPortPtr,
-		UserName: *userNamePtr, Password: *passwordPtr,
+		SerialNumber: sn, TcpPort: tcpPort,
+		UserName: userName, Password: password,
 		SensorsConfig: config}
 	inst.init()
-	fmt.Println(inst)
-	inst.createData()
-	inst.getInstruments()
-	inst.getInstrument()
 	inst.run()
 
 	for {

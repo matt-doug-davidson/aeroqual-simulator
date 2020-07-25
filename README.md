@@ -1,13 +1,15 @@
 # Aeroqual Simulator
 
-|Argument |  Required  | Default   |  Description  |
-|:--:|:--:|:--:|:--:|
-| sn | yes | N/A | Serial number of the instrument |
-| port | yes | N/A | TCP port used to connect to the instrument |
-| user | yes | N/A | User name for logging into the instrument |
-| pass | yes | N/A | Password for logging into the instrument |
+|ENV Variable |  Required  |  Description  |
+|:--:|:--:|:--:|
+| SN | yes |Serial number of the simulated instrument |
+| PORT | yes | TCP port used to connect to the simulated instrument |
+| UN | yes | User name for logging into the simulated instrument |
+| PW | yes |Password for logging into the simulated instrument |
 
 Example:
 ```bash
-./aeroqual-simulator  -sn "AQY BB-585" -port 6969 -user allied -pass "SibiuA\$rqua1"
+SN="AQY BB-585" PORT=6969 UN=allied PW="SibiuA\$rqua1" ./aeroqual-simulator
+
+SN="AQY BB-585" PORT=6969 UN=allied PW="SibiuA\$rqua1" go run aeroqual-simulator.go
 ```
