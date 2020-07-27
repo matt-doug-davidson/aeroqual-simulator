@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+	"math"
 	"math/rand"
 	"net/http"
 	"os"
@@ -15,9 +16,9 @@ import (
 
 // SensorYaml holds the configuration for a single sensor
 type SensorYaml struct {
-	Sensor  string
-	Minimum float64
-	Maximum float64
+	Sensor  string  `yaml:"sensor"`
+	Minimum float64 `yaml:"min"`
+	Maximum float64 `yaml:"max"`
 }
 
 type Config struct {
@@ -305,7 +306,8 @@ func createSensorValue(min float64, max float64) float64 {
 	valueRange := max - min
 	value := rand.Float64() * valueRange
 	value += min
-	return value
+	// Round to 1 decimal place
+	return math.Round(value*10) / 10
 }
 
 func createIntervalTimestrings() (string, string, string, string) {
